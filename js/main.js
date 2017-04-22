@@ -1,3 +1,6 @@
+var db = new PouchDB('stable');
+
+
 new Vue({
     el: '#root',
 
@@ -8,8 +11,8 @@ new Vue({
             mating_count: '',
         },
         genderClass: {
-            man: 'icon blue man',
-            woman: 'icon red woman',
+            male: 'icon blue man',
+            female: 'icon red woman',
         },
         filterOption: {
             gender: [{
@@ -17,10 +20,10 @@ new Vue({
                 value: '',
             }, {
                 name: '公馬',
-                value: 'man',
+                value: 'male',
             }, {
                 name: '母馬',
-                value: 'woman',
+                value: 'female',
             }, ],
             generation: [{
                 name: '全部',
@@ -62,7 +65,7 @@ new Vue({
         horses: [{
             name: '蕃茄',
             level: 30,
-            gender: 'woman',
+            gender: 'female',
             generation: 5,
             desc: '',
             deadth_count: 1,
@@ -81,7 +84,7 @@ new Vue({
         }, {
             name: '冰旋風',
             level: 30,
-            gender: 'man',
+            gender: 'male',
             generation: 5,
             desc: '',
             deadth_count: 1,
