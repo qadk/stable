@@ -14,14 +14,13 @@
         <div class="ui form filters">
 
             <div class="inline fields">
-                <label for="iGender">性別</label>
-                <div class="field" v-for="iGender in filterOption.gender">
+                <label for="gender">性別</label>
+                <div class="field" v-for="gender in filterOption.gender">
                     <div class="ui radio checkbox">
-                        <input v-model="inputFilter.gender" type="radio" checked="" tabindex="0" :value="iGender.value">
-                        <label>{{iGender.name}}</label>
+                        <input v-model="inputFilter.gender" type="radio" :value="gender.value">
+                        <label>{{gender.name}}</label>
                     </div>
                 </div>
-
             </div>
 
 
@@ -29,8 +28,18 @@
                 <label for="generation">世代</label>
                 <div class="field" v-for="generation in filterOption.generation">
                     <div class="ui radio checkbox">
-                        <input v-model="inputFilter.generation" type="radio" checked="" tabindex="0" :value="generation.value">
+                        <input v-model="inputFilter.generation" type="radio" :value="generation.value">
                         <label>{{generation.name}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inline fields">
+                <label for="mating_count">交配</label>
+                <div class="field" v-for="mating_count in filterOption.mating_count">
+                    <div class="ui radio checkbox">
+                        <input v-model="inputFilter.mating_count" type="radio" :value="mating_count.value">
+                        <label>{{mating_count.name}}</label>
                     </div>
                 </div>
             </div>
@@ -49,7 +58,7 @@
                         <span class="right floated">
                         出生於 {{horse.created_at}}
                     </span>
-                        <i class="icon woman red"></i>
+                        <i :class="[horse.gender == 'man'? genderClass.man : genderClass.woman]"></i>
                         <span>{{horse.generation}} 世代</span>
                     </div>
 
