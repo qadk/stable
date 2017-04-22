@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tw">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="root" class="ui container">
+        <div class="ui form filters">
+
+            <div class="inline fields">
+                <label for="iGender">性別</label>
+                <div class="field" v-for="iGender in filterOption.gender">
+                    <div class="ui radio checkbox">
+                        <input v-model="inputFilter.gender" type="radio" checked="" tabindex="0" :value="iGender.value">
+                        <label>{{iGender.name}}</label>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="inline fields">
+                <label for="generation">世代</label>
+                <div class="field" v-for="generation in filterOption.generation">
+                    <div class="ui radio checkbox">
+                        <input v-model="inputFilter.generation" type="radio" checked="" tabindex="0" :value="generation.value">
+                        <label>{{generation.name}}</label>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="ui cards dark horses">
+            <div class="card horse" v-for="horse in filterHorses">
+                <div class="image">
+                    <img src="http://fakeimg.pl/290/">
+                </div>
+                <div class="content">
+                    <div class="header">{{horse.name}} ({{horse.level}})</div>
+                    <div class="meta">
+                        <span class="right floated">
+                        出生於 {{horse.created_at}}
+                    </span>
+                        <i class="icon woman red"></i>
+                        <span>{{horse.generation}} 世代</span>
+                    </div>
+
+                    <div class="description">
+                        {{horse.desc}}
+
+                        <div>
+                            色碼：
+                            <span class="ui text red">{{horse.color_code.red}}</span>
+                            <span class="ui text white">{{horse.color_code.white}}</span>
+                            <span class="ui text grey">{{horse.color_code.black}}</span>
+                        </div>
+
+                        <div>
+                            交配次數: {{horse.mating_count}}
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="extra content">
+                    當前位置: {{horse.city}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
