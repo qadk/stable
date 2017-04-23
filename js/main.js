@@ -1,11 +1,63 @@
+const db = new PouchDB('stable');
+const store = {}
+var horses = []
+
+store.getHorses = (obj, prop) => {
+    db.allDocs({
+        include_docs: true,
+        attachments: true
+    }, function(err, response) {
+        if (err) { return console.log(err); }
+
+        response.rows.map(function(value, key) {
+            obj[prop].push(value.doc)
+        })
+    });
+}
+
+// store.reloadHorses = (obj, prop) => {
+//     store.getHorses().then(horses => {
+//         console.log(horses)
+//     })
+// }
+
+
 new Vue({
     el: '#root',
 
+    created() {
+        store.getHorses(this, 'horses')
+    },
+
     data: {
+        test_horses: [],
+
         inputFilter: {
             gender: '',
             generation: '',
             mating_count: '',
+        },
+        inputHorse: {
+            type: 'horse',
+
+            name: '冰旋風',
+            level: 30,
+            gender: 'male',
+            generation: 5,
+            desc: '',
+            deadth_count: 1,
+            mating_count: 1,
+
+            color_code: {
+                red: 0,
+                white: 1,
+                black: 2,
+            },
+
+            city: '海地爾',
+
+            created_at: '2017-03-17',
+            updated_at: '2017-03-17'
         },
         genderClass: {
             male: 'fa fa-mars',
@@ -114,15 +166,27 @@ new Vue({
     },
 
     methods: {
-        filterGender: function(gender, userInput) {
+        filterGender(gender, userInput) {
             return userInput == '' ? true : gender == userInput
         },
-        filterGeneration: function(generation, userInput) {
+        filterGeneration(generation, userInput) {
             return userInput == '' ? true : generation == userInput
         },
-        filterMatingCount: function(mating_count, userInput) {
+        filterMatingCount(mating_count, userInput) {
             return userInput === '' ? true :
                 userInput === true ? mating_count > 0 : mating_count <= 0
-        }
+        },
+
+        // db
+        createHorse() {
+            horse = this.inputHorse
+            console.log(horse)
+            db.post(horse, function callback(err, result) {
+                if (!err) {
+                    console.log('Successfully posted a horse!');
+                }
+            });
+        },
+
     }
 })

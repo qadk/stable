@@ -31,10 +31,9 @@
 
 
         <!--container-->
-        <div class="">
-
+        <section class="section is-medium">
             <!--menu-->
-            <div class="menu filters">
+            <div class="container menu filters">
 
                 <div class="field is-horizontal">
                     <div class="field-label">
@@ -71,15 +70,13 @@
                         </label>
                     </div>
                 </div>
+        </section>
 
+        <!--menu end-->
 
-            </div>
-            <hr>
-            <!--menu end-->
-
-            <!--horse cards-->
-            <div class="columns horses">
-
+        <!--horse cards-->
+        <section class="section is-medium">
+            <div class="comtainer columns">
 
                 <div class="column is-one-quarter card horse" v-for="horse in filterHorses">
                     <div class="card-image">
@@ -121,9 +118,11 @@
                     </div>
                 </div>
             </div>
-            <!--horse cards end-->
+        </section>
+        <!--horse cards end-->
 
-        </div>
+
+        <button @click='createHorse'>create horse</button>
         <!--container end-->
 
         <!--modal-->
@@ -165,10 +164,11 @@
         </div>
         <!--modal end-->
 
-    </div>
+        </div>
 
-    <script src="https://unpkg.com/vue"></script>
-    <script src="js/main.js"></script>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.2.0/pouchdb.js"></script>
+        <script src="js/main.js"></script>
 
 </body>
 
