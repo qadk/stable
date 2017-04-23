@@ -5,76 +5,98 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="root" class="ui container">
+    <div id="root" class="container">
         <!--header-->
-        <div class="ui fixed inverted menu">
-            <div class="ui container">
-                <a href="#" class="header item">
-                    Stable
-                </a>
+        <section class="hero is-dark is-medium">
+            <!-- Hero header: will stick at the top -->
+            <div class="hero-head">
+                <header class="nav">
+                    <div class="container">
+                        <div class="nav-left">
+                            <a class="nav-item">
+                                Stable
+                            </a>
+                        </div>
+                    </div>
+                </header>
             </div>
-        </div>
+
+        </section>
 
 
         <!--container-->
-        <div class="ui main container">
+        <div class="">
 
             <!--menu-->
-            <div class="ui form filters">
+            <div class="menu filters">
 
-                <div class="inline fields">
-                    <label for="gender">性別</label>
-                    <div class="field" v-for="gender in filterOption.gender">
-                        <div class="ui radio checkbox">
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">性別</label>
+                    </div>
+                    <div class="field-body">
+                        <label class="radio" v-for="gender in filterOption.gender">
                             <input v-model="inputFilter.gender" type="radio" :value="gender.value">
-                            <label>{{gender.name}}</label>
-                        </div>
+                            {{gender.name}}
+                        </label>
                     </div>
                 </div>
 
-
-                <div class="inline fields">
-                    <label for="generation">世代</label>
-                    <div class="field" v-for="generation in filterOption.generation">
-                        <div class="ui radio checkbox">
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">世代</label>
+                    </div>
+                    <div class="field-body">
+                        <label class="radio" v-for="generation in filterOption.generation">
                             <input v-model="inputFilter.generation" type="radio" :value="generation.value">
-                            <label>{{generation.name}}</label>
-                        </div>
+                            {{generation.name}}
+                        </label>
                     </div>
                 </div>
 
-                <div class="inline fields">
-                    <label for="mating_count">交配</label>
-                    <div class="field" v-for="mating_count in filterOption.mating_count">
-                        <div class="ui radio checkbox">
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">交配</label>
+                    </div>
+                    <div class="field-body">
+                        <label class="radio" v-for="mating_count in filterOption.mating_count">
                             <input v-model="inputFilter.mating_count" type="radio" :value="mating_count.value">
-                            <label>{{mating_count.name}}</label>
-                        </div>
+                            {{mating_count.name}}
+                        </label>
                     </div>
                 </div>
 
 
             </div>
+            <hr>
             <!--menu end-->
 
             <!--horse cards-->
-            <div class="ui cards dark horses">
-                <div class="card horse" v-for="horse in filterHorses">
-                    <div class="image">
-                        <img src="http://fakeimg.pl/290/">
+            <div class="columns horses">
+
+
+                <div class="column is-one-quarter card horse" v-for="horse in filterHorses">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src="http://fakeimg.pl/290/" alt="Image">
+                        </figure>
                     </div>
-                    <div class="content">
+                    <div class="card-content">
                         <div class="header">{{horse.name}} ({{horse.level}})</div>
                         <div class="meta">
                             <span class="right floated">
-                        出生於 {{horse.created_at}}
-                    </span>
-                            <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
+                                出生於 {{horse.created_at}}
+                            </span>
+                            <span class="icon">
+                                <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
+                            </span>
+
                             <span>{{horse.generation}} 世代</span>
                         </div>
 
@@ -83,8 +105,7 @@
 
                             <div>
                                 色碼：
-                                <span class="ui text red">{{horse.color_code.red}}</span>
-                                <span class="ui text white">{{horse.color_code.white}}</span>
+                                <span class="text white">{{horse.color_code.white}}</span>
                                 <span class="ui text grey">{{horse.color_code.black}}</span>
                             </div>
 
@@ -106,33 +127,48 @@
         <!--container end-->
 
         <!--modal-->
-        <div class="ui modal">
-            <i class="close icon"></i>
-            <div class="header">
-                Modal Title
-            </div>
-            <div class="image content">
-                <div class="image">
-                    An image can appear on left or an icon
+        <div class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-64x64">
+                                <img src="http://bulma.io/images/placeholders/128x128.png" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                                    <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla egestas. Nullam condimentum luctus turpis.
+                                </p>
+                            </div>
+                            <nav class="level">
+                                <div class="level-left">
+                                    <a class="level-item">
+                                        <span class="icon is-small"><i class="fa fa-reply"></i></span>
+                                    </a>
+                                    <a class="level-item">
+                                        <span class="icon is-small"><i class="fa fa-retweet"></i></span>
+                                    </a>
+                                    <a class="level-item">
+                                        <span class="icon is-small"><i class="fa fa-heart"></i></span>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+                    </article>
                 </div>
-                <div class="description">
-                    A description can appear on the right
-                </div>
             </div>
-            <div class="actions">
-                <div class="ui button">Cancel</div>
-                <div class="ui button">OK</div>
-            </div>
+            <button class="modal-close"></button>
         </div>
         <!--modal end-->
 
     </div>
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <script src="js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/pouchdb/6.2.0/pouchdb.min.js"></script>
 
 </body>
 

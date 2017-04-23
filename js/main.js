@@ -1,6 +1,3 @@
-var db = new PouchDB('stable');
-
-
 new Vue({
     el: '#root',
 
@@ -11,8 +8,8 @@ new Vue({
             mating_count: '',
         },
         genderClass: {
-            male: 'icon blue man',
-            female: 'icon red woman',
+            male: 'fa fa-mars',
+            female: 'fa fa-venus',
         },
         filterOption: {
             gender: [{
