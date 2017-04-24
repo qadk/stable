@@ -78,26 +78,31 @@
         <section class="section is-medium">
             <div class="container columns is-multiline ">
 
-                <div class="column is-one-quarter card is-narrow" v-for="horse in filterHorses">
+                <div class="column is-one-quarter card" v-for="horse in filterHorses">
                     <div class="card-image">
                         <figure class="image is-4by3">
                             <img src="http://fakeimg.pl/290/" alt="Image">
                         </figure>
                     </div>
-                    <div class="card-content">
-                        <div class="header">{{horse.name}} ({{horse.level}})</div>
-                        <div class="meta">
-                            <span class="right floated">
-                                出生於 {{horse.created_at}}
-                            </span>
-                            <span class="icon">
-                                <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
-                            </span>
 
-                            <span>{{horse.generation}} 世代</span>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">
+                                    {{horse.name}} ({{horse.level}})
+                                </p>
+                                <div class="subtitle is-6">
+                                    <span class="icon is-small">
+                                        <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
+                                    </span> {{horse.generation}} 世代
+                                    <dif class="is-pulled-right">出生於 {{horse.created_at}}</dif>
+                                </div>
+
+
+                            </div>
                         </div>
 
-                        <div class="description">
+                        <div class="content">
                             {{horse.desc}}
 
                             <div>
@@ -112,10 +117,12 @@
 
                         </div>
 
+                        <footer class="card-footer">
+                            當前位置: {{horse.city}}
+                        </footer>
+
                     </div>
-                    <div class="extra content">
-                        當前位置: {{horse.city}}
-                    </div>
+
                 </div>
             </div>
         </section>
