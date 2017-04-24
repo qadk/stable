@@ -33,9 +33,9 @@ new Vue({
         test_horses: [],
 
         inputFilter: {
-            gender: '',
-            generation: '',
-            mating_count: '',
+            gender: 'all',
+            generation: 'all',
+            mating_count: 'all',
         },
         inputHorse: {
             type: 'horse',
@@ -60,13 +60,13 @@ new Vue({
             updated_at: '2017-03-17'
         },
         genderClass: {
-            male: 'fa fa-mars',
-            female: 'fa fa-venus',
+            male: 'fa fa-mars blue',
+            female: 'fa fa-venus red',
         },
         filterOption: {
             gender: [{
                 name: '全部',
-                value: '',
+                value: 'all',
             }, {
                 name: '公馬',
                 value: 'male',
@@ -76,7 +76,7 @@ new Vue({
             }, ],
             generation: [{
                 name: '全部',
-                value: '',
+                value: 'all',
             }, {
                 name: '7',
                 value: 7,
@@ -101,7 +101,7 @@ new Vue({
             }, ],
             mating_count: [{
                 name: '全部',
-                value: '',
+                value: 'all',
             }, {
                 name: '可交配',
                 value: true,
@@ -131,13 +131,13 @@ new Vue({
             created_at: '2017-03-17',
             updated_at: '2017-03-17'
         }, {
-            name: '冰旋風',
+            name: '公馬',
             level: 30,
             gender: 'male',
             generation: 5,
             desc: '',
             deadth_count: 1,
-            mating_count: 1,
+            mating_count: 0,
 
             color_code: {
                 red: 0,
@@ -167,14 +167,14 @@ new Vue({
 
     methods: {
         filterGender(gender, userInput) {
-            return userInput == '' ? true : gender == userInput
+            return userInput == 'all' ? true : gender == userInput
         },
         filterGeneration(generation, userInput) {
-            return userInput == '' ? true : generation == userInput
+            return userInput == 'all' ? true : generation == userInput
         },
         filterMatingCount(mating_count, userInput) {
-            return userInput === '' ? true :
-                userInput === true ? mating_count > 0 : mating_count <= 0
+            return userInput === 'all' ? true :
+                userInput === true ? !!mating_count : !mating_count
         },
 
         // db
