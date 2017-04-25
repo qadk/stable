@@ -2,6 +2,84 @@ const db = new PouchDB('stable');
 const store = {}
 var horses = []
 
+Vue.component('create-horse-modal', {
+    template: `
+    <div class="modal is-active">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">名稱</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input v-model="horse.name" class="input" :class="{'is-danger': !horse.name}" type="text" placeholder="馬匹名稱">
+                                            </div>
+                                            <p class="help is-danger" v-if="!horse.name">
+                                                This field is required
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field is-grouped">
+                                    <p class="control">
+                                        <button class="button is-primary" @click="this.createHorse">Submit</button>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <button class="modal-close" @click="$emit('close')"></button>
+        </div>
+    `,
+    data() {
+        return {
+            horse: {
+                type: 'horse',
+
+                name: '冰旋風',
+                level: 30,
+                gender: 'male',
+                generation: 5,
+                desc: '',
+                deadth_count: 1,
+                mating_count: 1,
+
+                color_code: {
+                    red: 0,
+                    white: 1,
+                    black: 2,
+                },
+
+                city: '海地爾',
+
+                created_at: '2017-03-17',
+                updated_at: '2017-03-17'
+            },
+        }
+    },
+    methods: {
+        createHorse() {
+            self = this
+            db.post(self.horse, function callback(err, result) {
+                if (!err) {
+                    console.log('Successfully posted a horse!');
+                    self.$emit('close')
+                }
+            });
+        },
+    }
+})
+
 store.getHorses = (obj, prop) => {
     db.allDocs({
         include_docs: true,
@@ -30,35 +108,14 @@ new Vue({
     },
 
     data: {
-        test_horses: [],
+        showCreateHorseModal: false,
 
         inputFilter: {
             gender: 'all',
             generation: 'all',
             mating_count: 'all',
         },
-        inputHorse: {
-            type: 'horse',
 
-            name: '冰旋風',
-            level: 30,
-            gender: 'male',
-            generation: 5,
-            desc: '',
-            deadth_count: 1,
-            mating_count: 1,
-
-            color_code: {
-                red: 0,
-                white: 1,
-                black: 2,
-            },
-
-            city: '海地爾',
-
-            created_at: '2017-03-17',
-            updated_at: '2017-03-17'
-        },
         genderClass: {
             male: 'fa fa-mars blue',
             female: 'fa fa-venus red',
