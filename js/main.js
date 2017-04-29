@@ -1,6 +1,96 @@
-const db = new PouchDB('stable');
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyBQps0i4ag5joZal67bSertXiI9yVyepSk",
+    authDomain: "stable-132f4.firebaseapp.com",
+    databaseURL: "https://stable-132f4.firebaseio.com",
+    projectId: "stable-132f4",
+    storageBucket: "stable-132f4.appspot.com",
+    messagingSenderId: "150021425917"
+};
+var firebaseApp = firebase.initializeApp(config);
+var db = firebaseApp.database()
+
+
 const store = {}
 var horses = []
+
+Vue.component('login-modal', {
+    template: `<div class="modal is-active">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="box">
+                            <div class="content">
+
+
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">信箱</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input v-model="user.email" class="input" :class="{'is-danger': !user.email}" type="text" placeholder="信箱">
+                                            </div>
+                                            <p class="help is-danger" v-if="!user.email">
+                                                This field is required
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">密碼</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input v-model="user.password" class="input" :class="{'is-danger': !user.password}" type="password" placeholder="密碼(六個字元以上)">
+                                            </div>
+                                            <p class="help is-danger" v-if="!user.password">
+                                                This field is required
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field is-grouped">
+                                    <p class="control">
+                                        <button class="button is-primary" @click="this.signIn">Submit</button>
+                                    </p>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>`,
+    data() {
+        return {
+            user: {
+                email: '',
+                password: '',
+            }
+        }
+    },
+
+    methods: {
+        signIn() {
+            var email = this.user.email
+            var password = this.user.password
+
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+            })
+        },
+    }
+
+
+})
 
 Vue.component('create-horse-modal', {
     template: `
@@ -11,6 +101,7 @@ Vue.component('create-horse-modal', {
                     <article class="media">
                         <div class="media-content">
                             <div class="content">
+                            
                                 <div class="field is-horizontal">
                                     <div class="field-label is-normal">
                                         <label class="label">名稱</label>
@@ -29,7 +120,7 @@ Vue.component('create-horse-modal', {
 
                                 <div class="field is-grouped">
                                     <p class="control">
-                                        <button class="button is-primary" @click="this.createHorse">Submit</button>
+                                        <button class="button is-primary" @click="this.addHorse">Submit</button>
                                     </p>
                                 </div>
 
@@ -44,22 +135,26 @@ Vue.component('create-horse-modal', {
     data() {
         return {
             horse: {
-                type: 'horse',
-
-                name: '冰旋風',
-                level: 30,
-                gender: 'male',
-                generation: 5,
-                desc: '',
-                deadth_count: 1,
-                mating_count: 1,
-
+                generation: 6,
+                tair: 't6c',
                 color_code: {
                     red: 0,
                     white: 1,
                     black: 2,
                 },
 
+                name: '冰旋風',
+                level: 30,
+                gender: 'male',
+                desc: '',
+                deadth_count: 1,
+                mating_count: 1,
+                stats: {
+                    speed: "113.50",
+                    acceleration: "113.50",
+                    agility: "110.50",
+                    breaking: "110.50"
+                },
                 city: '海地爾',
 
                 created_at: '2017-03-17',
@@ -68,47 +163,37 @@ Vue.component('create-horse-modal', {
         }
     },
     methods: {
-        createHorse() {
-            self = this
-            db.post(self.horse, function callback(err, result) {
-                if (!err) {
-                    console.log('Successfully posted a horse!');
-                    self.$emit('close')
-                }
-            });
+        addHorse() {
+            vm.$firebaseRefs.horses.push(this.horse)
+            this.$emit('close');
         },
     }
 })
 
-store.getHorses = (obj, prop) => {
-    db.allDocs({
-        include_docs: true,
-        attachments: true
-    }, function(err, response) {
-        if (err) { return console.log(err); }
-
-        response.rows.map(function(value, key) {
-            obj[prop].push(value.doc)
-        })
-    });
-}
-
-// store.reloadHorses = (obj, prop) => {
-//     store.getHorses().then(horses => {
-//         console.log(horses)
-//     })
-// }
-
-
-new Vue({
+var vm = new Vue({
     el: '#root',
 
-    created() {
-        store.getHorses(this, 'horses')
+    beforeCreate() {
+        firebaseApp.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.user = user
+                this.$bindAsArray('horses', db.ref('users/' + user.uid + '/horses'))
+                console.log("User is logined", user.uid)
+            } else {
+                vue.showLoginModal = true;
+                console.log("User is not logined yet.");
+            }
+
+            console.log(123, this.user.uid)
+
+        }).bind(this)
     },
 
     data: {
         showCreateHorseModal: false,
+        showLoginModal: false,
+
+        user: {},
 
         inputFilter: {
             gender: 'all',
@@ -168,45 +253,7 @@ new Vue({
             }],
         },
 
-        horses: [{
-            name: '蕃茄',
-            level: 30,
-            gender: 'female',
-            generation: 5,
-            desc: '',
-            deadth_count: 1,
-            mating_count: 1,
-
-            color_code: {
-                red: 0,
-                white: 1,
-                black: 2,
-            },
-
-            city: '海地爾',
-
-            created_at: '2017-03-17',
-            updated_at: '2017-03-17'
-        }, {
-            name: '公馬',
-            level: 30,
-            gender: 'male',
-            generation: 5,
-            desc: '',
-            deadth_count: 1,
-            mating_count: 0,
-
-            color_code: {
-                red: 0,
-                white: 1,
-                black: 2,
-            },
-
-            city: '海地爾',
-
-            created_at: '2017-03-17',
-            updated_at: '2017-03-17'
-        }]
+        horses: [],
     },
 
 
@@ -219,7 +266,6 @@ new Vue({
                     this.filterMatingCount(horse.mating_count, this.inputFilter.mating_count)
             })
         },
-
     },
 
     methods: {
@@ -233,17 +279,5 @@ new Vue({
             return userInput === 'all' ? true :
                 userInput === true ? !!mating_count : !mating_count
         },
-
-        // db
-        createHorse() {
-            horse = this.inputHorse
-            console.log(horse)
-            db.post(horse, function callback(err, result) {
-                if (!err) {
-                    console.log('Successfully posted a horse!');
-                }
-            });
-        },
-
     }
 })

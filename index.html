@@ -134,14 +134,17 @@
 
         <!--modal-->
         <create-horse-modal v-if="showCreateHorseModal" @close="showCreateHorseModal = false"></create-horse-modal>
+        <login-modal v-if="showLoginModal" @close="showLoginModal = false"></login-modal>
 
         <!--modal end-->
 
         </div>
 
         <script src="https://unpkg.com/vue"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.2.0/pouchdb.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+        <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
         <script src="js/main.js"></script>
+
 
 </body>
 
