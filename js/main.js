@@ -95,60 +95,154 @@ Vue.component('login-modal', {
 Vue.component('create-horse-modal', {
     template: `
     <div class="modal is-active">
-            <div class="modal-background"></div>
-            <div class="modal-content">
-                <div class="box">
-                    <article class="media">
-                        <div class="media-content">
-                            <div class="content">
-                            
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">名稱</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input v-model="horse.name" class="input" :class="{'is-danger': !horse.name}" type="text" placeholder="馬匹名稱">
-                                            </div>
-                                            <p class="help is-danger" v-if="!horse.name">
-                                                This field is required
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="modal-background" @click="$emit('close')"></div>
 
-                                <div class="field is-grouped">
-                                    <p class="control">
-                                        <button class="button is-primary" @click="this.addHorse">Submit</button>
-                                    </p>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">新增馬匹</p>
+                    <button class="delete" @click="$emit('close')"></button>
+                </header>
+                
+                <section class="modal-card-body">
+                
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">名稱</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input v-model="inputHorse.name" class="input" :class="{'is-danger': !inputHorse.name}" type="text" placeholder="馬匹名稱">
                                 </div>
-
+                                <p class="help is-danger" v-if="!inputHorse.name">
+                                    This field is required
+                                </p>
                             </div>
                         </div>
-                    </article>
-                </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">世代</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="slider">
+                                        <input v-model="inputHorse.generation" type="range" min="0" max="9"/>
+                                        <output>{{inputHorse.generation}}</output>
+                                    </div>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.generation">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">種類</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-narrow">
+                                <div class="control" v-for="tier in tiers">
+                                    <label class="radio">
+                                        <input v-model="inputHorse.tier" type="radio" :value="tier"/> 
+                                        <img :src=" 'imgs/horses/' + tier + '.png' ">
+                                    </label>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.tier">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">等級</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="slider">
+                                        <input v-model="inputHorse.level" type="range" min="1" max="30"/>
+                                        <output>{{inputHorse.level}}</output>
+                                    </div>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.level">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">性別</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-narrow">
+                                <div class="control">
+                                    <label class="radio">
+                                        <input v-model="inputHorse.gender" type="radio" value="male"/> 公馬
+                                    </label>
+                                    <label class="radio">
+                                        <input v-model="inputHorse.gender" type="radio" value="female"/> 母馬
+                                    </label>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.gender">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">交配次數</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="slider">
+                                        <input v-model="inputHorse.matingCount" type="range" min="0" max="2"/>
+                                        <output>{{inputHorse.matingCount}}</output>
+                                    </div>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.matingCount">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </section>
+                <footer class="modal-card-foot">
+                    <a class="button is-success" @click="this.addHorse">Create</a>
+                    <a class="button" @click="$emit('close')">Cancel</a>
+                </footer>
             </div>
-            <button class="modal-close" @click="$emit('close')"></button>
         </div>
     `,
     data() {
         return {
-            horse: {
+            inputHorse: {
                 generation: 6,
-                tair: 't6c',
-                color_code: {
+                tier: 't6c',
+                color: {
                     red: 0,
                     white: 1,
                     black: 2,
                 },
 
-                name: '冰旋風',
-                level: 30,
+                name: '',
+                level: 1,
                 gender: 'male',
                 desc: '',
-                deadth_count: 1,
-                mating_count: 1,
+                deadthCount: 1,
+                matingCount: 1,
                 stats: {
                     speed: "113.50",
                     acceleration: "113.50",
@@ -162,12 +256,37 @@ Vue.component('create-horse-modal', {
             },
         }
     },
+    firebase() {
+        return {
+            horses: db.ref('app/horses')
+        }
+    },
+    computed: {
+        tiers() {
+            var self = this;
+            var tiers = this.horses.map(function(horse) { return horse.tier; });
+            console.log(tiers)
+            return tiers.filter((tier) => {
+                    return tier.match(self.inputHorse.generation);
+                })
+                // return this.horses
+        }
+    },
+
     methods: {
+        findTier(element) {
+            return element.tier == this.inputHorse.tier;
+        },
         addHorse() {
-            vm.$firebaseRefs.horses.push(this.horse)
+            var color = this.horses.find(this.findTier).color
+            this.inputHorse.color.red = color.red
+            this.inputHorse.color.white = color.white
+            this.inputHorse.color.black = color.black
+
+            vm.$firebaseRefs.horses.push(this.inputHorse)
             this.$emit('close');
         },
-    }
+    },
 })
 
 var vm = new Vue({
@@ -176,24 +295,24 @@ var vm = new Vue({
     beforeCreate() {
         firebaseApp.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.user = user
+                console.log(this)
                 this.$bindAsArray('horses', db.ref('users/' + user.uid + '/horses'))
+                    // this.$bindAsArray('baseHorses', db.ref('app/horses'))
+
                 console.log("User is logined", user.uid)
             } else {
                 vue.showLoginModal = true;
                 console.log("User is not logined yet.");
             }
-
-            console.log(123, this.user.uid)
-
         }).bind(this)
+
     },
 
     data: {
+
+
         showCreateHorseModal: false,
         showLoginModal: false,
-
-        user: {},
 
         inputFilter: {
             gender: 'all',

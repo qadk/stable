@@ -81,7 +81,7 @@
                 <div class="column is-one-quarter card" v-for="horse in filterHorses">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="http://fakeimg.pl/290/" alt="Image">
+                            <img :src="'imgs/horses/' + horse.tier + '.png'" alt="Image">
                         </figure>
                     </div>
 
@@ -107,8 +107,9 @@
 
                             <div>
                                 色碼：
-                                <span class="text white">{{horse.color_code.white}}</span>
-                                <span class="ui text grey">{{horse.color_code.black}}</span>
+                                <span class="text red">{{horse.color.red}}</span>
+                                <span class="text black">{{horse.color.black}}</span>
+                                <span class="text grey">{{horse.color.white}}</span>
                             </div>
 
                             <div>
