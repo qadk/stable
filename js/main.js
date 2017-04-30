@@ -128,7 +128,7 @@ Vue.component('create-horse-modal', {
                             <div class="field">
                                 <div class="control">
                                     <div class="slider">
-                                        <input v-model="inputHorse.generation" type="range" min="0" max="9"/>
+                                        <input v-model="inputHorse.generation" type="range" min="1" max="9"/>
                                         <output>{{inputHorse.generation}}</output>
                                     </div>
                                 </div>
