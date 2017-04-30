@@ -11,29 +11,30 @@
 </head>
 
 <body>
-    <div id="root" class="container">
+    <div id="root">
         <!--header-->
-        <section class="hero is-dark is-medium">
-            <!-- Hero header: will stick at the top -->
-            <div class="hero-head">
-                <header class="nav">
-                    <div class="container">
-                        <div class="nav-left">
-                            <a class="nav-item">
-                                Stable
-                            </a>
-                        </div>
-                    </div>
-                </header>
-            </div>
+        <nav class="nav has-shadow" id="top">
+            <div class="container">
+                <div class="nav-left">
+                    <a class="nav-item" href="../index.html">
+                        Stable
+                    </a>
 
-        </section>
+                </div>
+                <div class="nav-right nav-menu">
+                    <div class="nav-item">
+                        <a class="button is-info" @click='showCreateHorseModal = true'>新增馬匹</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
 
         <!--container-->
-        <section class="section is-medium">
+        <div class="container">
+
             <!--menu-->
-            <div class="container menu filters">
+            <div class="section menu">
 
                 <div class="field is-horizontal">
                     <div class="field-label">
@@ -64,87 +65,93 @@
                         <label class="label">交配</label>
                     </div>
                     <div class="field-body">
-                        <label class="radio" v-for="mating_count in filterOption.mating_count">
-                            <input v-model="inputFilter.mating_count" type="radio" :value="mating_count.value">
-                            {{mating_count.name}}
+                        <label class="radio" v-for="matingCount in filterOption.matingCount">
+                            <input v-model="inputFilter.matingCount" type="radio" :value="matingCount.value">
+                            {{matingCount.name}}
                         </label>
                     </div>
                 </div>
-        </section>
+                </section>
 
-        <!--menu end-->
+                <!--menu end-->
 
-        <!--horse cards-->
-        <section class="section is-medium">
-            <div class="container columns is-multiline ">
+                <!--horse cards-->
+                <div class="section columns is-multiline">
 
-                <div class="column is-one-quarter card" v-for="horse in filterHorses">
-                    <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img :src="'imgs/horses/' + horse.tier + '.png'" alt="Image">
-                        </figure>
-                    </div>
+                    <div class="column is-one-quarter" v-for="horse in filterHorses">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image is-4by3">
+                                    <img :src="'imgs/horses/' + horse.tier + '.png'" alt="Image">
+                                </figure>
+                            </div>
 
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-4">
-                                    {{horse.name}} ({{horse.level}})
-                                </p>
-                                <div class="subtitle is-6">
-                                    <span class="icon is-small">
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p class="title is-4">
+                                            {{horse.name}} ({{horse.level}})
+                                        </p>
+                                        <div class="subtitle is-6">
+                                            <span class="icon is-small">
                                         <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
                                     </span> {{horse.generation}} 世代
-                                    <div class="is-pulled-right">出生於 {{horse.created_at}}</div>
+                                            <div class="is-pulled-right">出生於 {{horse.created_at}}</div>
+                                        </div>
+
+
+                                    </div>
                                 </div>
 
+                                <div class="content">
+                                    {{horse.desc}}
+
+                                    <div>
+                                        色碼：
+                                        <span class="text red">{{horse.color.red}}</span>
+                                        <span class="text black">{{horse.color.black}}</span>
+                                        <span class="text grey">{{horse.color.white}}</span>
+                                    </div>
+
+                                    <div>
+                                        剩餘交配次數: {{horse.matingCount}}
+                                    </div>
+
+                                </div>
 
                             </div>
+
+                            <footer class="card-footer">
+                                <a class="card-footer-item">交配</a>
+                                <a class="card-footer-item">販售</a>
+                                <a class="card-footer-item">編輯</a>
+                                <a class="card-footer-item">刪除</a>
+                                <!--當前位置: {{horse.city}}-->
+                            </footer>
                         </div>
-
-                        <div class="content">
-                            {{horse.desc}}
-
-                            <div>
-                                色碼：
-                                <span class="text red">{{horse.color.red}}</span>
-                                <span class="text black">{{horse.color.black}}</span>
-                                <span class="text grey">{{horse.color.white}}</span>
-                            </div>
-
-                            <div>
-                                交配次數: {{horse.mating_count}}
-                            </div>
-
-                        </div>
-
-                        <footer class="card-footer">
-                            當前位置: {{horse.city}}
-                        </footer>
 
                     </div>
 
                 </div>
+                <!--horse cards end-->
+
             </div>
-        </section>
-        <!--horse cards end-->
+            <!--container end-->
 
 
-        <button @click='showCreateHorseModal = true'>create horse</button>
-        <!--container end-->
+            <!--modal-->
+            <create-horse-modal v-if="showCreateHorseModal" @close="showCreateHorseModal = false"></create-horse-modal>
+            <login-modal v-if="showLoginModal" @close="showLoginModal = false"></login-modal>
 
-        <!--modal-->
-        <create-horse-modal v-if="showCreateHorseModal" @close="showCreateHorseModal = false"></create-horse-modal>
-        <login-modal v-if="showLoginModal" @close="showLoginModal = false"></login-modal>
-
-        <!--modal end-->
+            <!--modal end-->
 
         </div>
 
-        <script src="https://unpkg.com/vue"></script>
-        <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-        <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
-        <script src="js/main.js"></script>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+    <script src="js/main.js"></script>
 
 
 </body>

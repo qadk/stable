@@ -267,9 +267,8 @@ Vue.component('create-horse-modal', {
             var tiers = this.horses.map(function(horse) { return horse.tier; });
             console.log(tiers)
             return tiers.filter((tier) => {
-                    return tier.match(self.inputHorse.generation);
-                })
-                // return this.horses
+                return tier.match(self.inputHorse.generation);
+            })
         }
     },
 
@@ -277,11 +276,21 @@ Vue.component('create-horse-modal', {
         findTier(element) {
             return element.tier == this.inputHorse.tier;
         },
-        addHorse() {
-            var color = this.horses.find(this.findTier).color
+        setInputHorseColor(color) {
             this.inputHorse.color.red = color.red
             this.inputHorse.color.white = color.white
             this.inputHorse.color.black = color.black
+        },
+        setInputHorseStats(stats) {
+            this.inputHorse.stats.speed = stats.speed
+            this.inputHorse.stats.acceleration = stats.acceleration
+            this.inputHorse.stats.agility = stats.agility
+            this.inputHorse.stats.breaking = stats.breaking
+        },
+        addHorse() {
+            var horse = this.horses.find(this.findTier)
+            this.setInputHorseColor(horse.color)
+            this.setInputHorseStats(horse.stats)
 
             vm.$firebaseRefs.horses.push(this.inputHorse)
             this.$emit('close');
@@ -295,10 +304,7 @@ var vm = new Vue({
     beforeCreate() {
         firebaseApp.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log(this)
                 this.$bindAsArray('horses', db.ref('users/' + user.uid + '/horses'))
-                    // this.$bindAsArray('baseHorses', db.ref('app/horses'))
-
                 console.log("User is logined", user.uid)
             } else {
                 vue.showLoginModal = true;
@@ -317,7 +323,7 @@ var vm = new Vue({
         inputFilter: {
             gender: 'all',
             generation: 'all',
-            mating_count: 'all',
+            matingCount: 'all',
         },
 
         genderClass: {
@@ -360,7 +366,7 @@ var vm = new Vue({
                 name: '1',
                 value: 1,
             }, ],
-            mating_count: [{
+            matingCount: [{
                 name: '全部',
                 value: 'all',
             }, {
@@ -382,7 +388,7 @@ var vm = new Vue({
             return this.horses.filter(horse => {
                 return this.filterGender(horse.gender, this.inputFilter.gender) &&
                     this.filterGeneration(horse.generation, this.inputFilter.generation) &&
-                    this.filterMatingCount(horse.mating_count, this.inputFilter.mating_count)
+                    this.filterMatingCount(horse.matingCount, this.inputFilter.matingCount)
             })
         },
     },
@@ -396,7 +402,7 @@ var vm = new Vue({
         },
         filterMatingCount(mating_count, userInput) {
             return userInput === 'all' ? true :
-                userInput === true ? !!mating_count : !mating_count
+                userInput === true ? mating_count > 0 : mating_count <= 0
         },
     }
 })
