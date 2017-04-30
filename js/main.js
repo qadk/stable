@@ -16,11 +16,10 @@ var horses = []
 
 Vue.component('login-modal', {
     template: `<div class="modal is-active">
-                    <div class="modal-background"></div>
+                    <div class="modal-background" @click="$emit('close')"></div>
                     <div class="modal-content">
                         <div class="box">
                             <div class="content">
-
 
                                 <div class="field is-horizontal">
                                     <div class="field-label is-normal">
@@ -60,8 +59,6 @@ Vue.component('login-modal', {
                                     </p>
                                 </div>
 
-
-
                             </div>
                         </div>
                     </div>
@@ -86,6 +83,8 @@ Vue.component('login-modal', {
                 var errorMessage = error.message;
                 // ...
             })
+
+            this.$emit('close')
         },
     }
 
@@ -230,7 +229,7 @@ Vue.component('create-horse-modal', {
         return {
             inputHorse: {
                 generation: 6,
-                tier: 't6c',
+                tier: '',
                 color: {
                     red: 0,
                     white: 1,
@@ -302,6 +301,7 @@ var vm = new Vue({
     el: '#root',
 
     beforeCreate() {
+        vue = this
         firebaseApp.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.$bindAsArray('horses', db.ref('users/' + user.uid + '/horses'))
@@ -315,8 +315,6 @@ var vm = new Vue({
     },
 
     data: {
-
-
         showCreateHorseModal: false,
         showLoginModal: false,
 
