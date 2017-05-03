@@ -297,6 +297,115 @@ Vue.component('create-horse-modal', {
     },
 })
 
+Vue.component('edit-horse-modal', {
+    template: `<div class="modal is-active">
+            <div class="modal-background" @click="$emit('close')"></div>
+
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">編輯馬匹</p>
+                    <button class="delete" @click="$emit('close')"></button>
+                </header>
+                
+                <section class="modal-card-body">
+                
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">名稱</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input v-model="inputHorse.name" class="input" :class="{'is-danger': !inputHorse.name}" type="text" placeholder="馬匹名稱" value="value">
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.name">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">等級</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="slider">
+                                        <input v-model="inputHorse.level" type="range" min="1" max="30"/>
+                                        <output>{{inputHorse.level}}</output>
+                                    </div>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.level">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">性別</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-narrow">
+                                <div class="control">
+                                    <label class="radio">
+                                        <input v-model="inputHorse.gender" type="radio" value="male"/> 公馬
+                                    </label>
+                                    <label class="radio">
+                                        <input v-model="inputHorse.gender" type="radio" value="female"/> 母馬
+                                    </label>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.gender">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">交配次數</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="slider">
+                                        <input v-model="inputHorse.matingCount" type="range" min="0" max="2"/>
+                                        <output>{{inputHorse.matingCount}}</output>
+                                    </div>
+                                </div>
+                                <p class="help is-danger" v-if="!inputHorse.matingCount">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </section>
+                <footer class="modal-card-foot">
+                    <a class="button is-success" @click="this.updateHorse">Create</a>
+                    <a class="button" @click="$emit('close')">Cancel</a>
+                </footer>
+            </div>
+        </div>`,
+    methods: {
+        updateHorse() {
+            var key = this.inputHorse['.key'];
+            delete this.inputHorse['.key'];
+            vm.$firebaseRefs.horses.child(key).set(this.inputHorse)
+
+            this.$emit('close')
+        }
+    },
+
+    props: ['inputHorse']
+})
+
+
+
 var vm = new Vue({
     el: '#root',
 
@@ -316,6 +425,7 @@ var vm = new Vue({
 
     data: {
         showCreateHorseModal: false,
+        showEditHorseModal: false,
         showLoginModal: false,
 
         inputFilter: {
@@ -376,6 +486,8 @@ var vm = new Vue({
             }],
         },
 
+        selectedHorse: {},
+
         horses: [],
     },
 
@@ -401,6 +513,10 @@ var vm = new Vue({
         filterMatingCount(mating_count, userInput) {
             return userInput === 'all' ? true :
                 userInput === true ? mating_count > 0 : mating_count <= 0
+        },
+
+        removeHorse(horse) {
+            vm.$firebaseRefs.horses.child(horse['.key']).remove()
         },
     }
 })

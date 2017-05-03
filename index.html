@@ -71,81 +71,81 @@
                         </label>
                     </div>
                 </div>
-                </section>
+            </div>
+            <!--menu end-->
 
-                <!--menu end-->
+            <!--horse cards-->
+            <div class="section columns is-multiline">
 
-                <!--horse cards-->
-                <div class="section columns is-multiline">
-
-                    <div class="column is-one-quarter" v-for="horse in filterHorses">
-                        <div class="card">
-                            <div class="card-image">
-                                <figure class="image is-4by3">
-                                    <img :src="'imgs/horses/' + horse.tier + '.png'" alt="Image">
-                                </figure>
-                            </div>
-
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-content">
-                                        <p class="title is-4">
-                                            {{horse.name}} ({{horse.level}})
-                                        </p>
-                                        <div class="subtitle is-6">
-                                            <span class="icon is-small">
-                                        <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
-                                    </span> {{horse.generation}} 世代
-                                            <div class="is-pulled-right">出生於 {{horse.created_at}}</div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-
-                                <div class="content">
-                                    {{horse.desc}}
-
-                                    <div>
-                                        色碼：
-                                        <span class="text red">{{horse.color.red}}</span>
-                                        <span class="text black">{{horse.color.black}}</span>
-                                        <span class="text grey">{{horse.color.white}}</span>
-                                    </div>
-
-                                    <div>
-                                        剩餘交配次數: {{horse.matingCount}}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <footer class="card-footer">
-                                <a class="card-footer-item">交配</a>
-                                <a class="card-footer-item">販售</a>
-                                <a class="card-footer-item">編輯</a>
-                                <a class="card-footer-item">刪除</a>
-                                <!--當前位置: {{horse.city}}-->
-                            </footer>
+                <div class="column is-one-quarter" v-for="horse in filterHorses">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img :src="'imgs/horses/' + horse.tier + '.png'" alt="Image">
+                            </figure>
                         </div>
 
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4">
+                                        {{horse.name}} ({{horse.level}})
+                                    </p>
+                                    <div class="subtitle is-6">
+                                        <span class="icon is-small">
+                                        <i :class="[horse.gender == 'male'? genderClass.male : genderClass.female]"></i>
+                                    </span> {{horse.generation}} 世代
+                                        <div class="is-pulled-right">出生於 {{horse.created_at}}</div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                {{horse.desc}}
+
+                                <div>
+                                    色碼：
+                                    <span class="text red">{{horse.color.red}}</span>
+                                    <span class="text black">{{horse.color.black}}</span>
+                                    <span class="text grey">{{horse.color.white}}</span>
+                                </div>
+
+                                <div>
+                                    剩餘交配次數: {{horse.matingCount}}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <footer class="card-footer">
+                            <a class="card-footer-item">交配</a>
+                            <a class="card-footer-item">販售</a>
+                            <a class="card-footer-item" @click="showEditHorseModal=true; selectedHorse=horse">編輯</a>
+                            <a class="card-footer-item" @click="removeHorse(horse)">刪除</a>
+                            <!--當前位置: {{horse.city}}-->
+                        </footer>
                     </div>
 
                 </div>
-                <!--horse cards end-->
 
             </div>
-            <!--container end-->
-
-
-            <!--modal-->
-            <create-horse-modal v-if="showCreateHorseModal" @close="showCreateHorseModal = false"></create-horse-modal>
-            <login-modal v-if="showLoginModal" @close="showLoginModal = false"></login-modal>
-
-            <!--modal end-->
+            <!--horse cards end-->
 
         </div>
+        <!--container end-->
+
+
+        <!--modal-->
+        <create-horse-modal v-if="showCreateHorseModal" @close="showCreateHorseModal = false"></create-horse-modal>
+        <edit-horse-modal v-if="showEditHorseModal" @close="showEditHorseModal = false" :input-horse="selectedHorse"></edit-horse-modal>
+        <login-modal v-if="showLoginModal" @close="showLoginModal = false"></login-modal>
+
+        <!--modal end-->
+
+    </div>
 
     </div>
     <script src="https://unpkg.com/vue"></script>
